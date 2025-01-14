@@ -22,15 +22,7 @@ public class Season {
         return month >= 9 ? getSeasonYearStart() : getSeasonYearEnd();
     }
 
-    public static LocalDate getSeasonDateStart() {
-        return LocalDate.of(getSeasonYearStart(), 9, 1);
-    }
-
     public static LocalDate getSeasonDateEnd() {
         return LocalDate.of(getSeasonYearEnd(), 8, 31);
-    }
-
-    public static String asString() {
-        return getSeasonYearStart() + "-" + getSeasonYearEnd();
     }
 }

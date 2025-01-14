@@ -4,10 +4,8 @@ import api_jours_feries.ApiException;
 import api_jours_feries.Configuration;
 import api_jours_feries.apis.DefaultApi;
 import api_jours_feries.models.Zone;
-import api_vacances.apis.DatasetApi;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.val;
-import org.json.JSONObject;
 import org.model.FrenchMonth;
 import org.model.Season;
 

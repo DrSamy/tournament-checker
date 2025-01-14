@@ -12,11 +12,11 @@ Se base sur :
 
 ## Vérification de la disponibilité d'une date
 
-`java -jar tournament-checker.jar -M N3 -m D8 -s 2025-02-22 -e 2025-02-23 -p 35400 -f <FICHIER>`
+`java -jar tournament-checker.jar -M N3 -m D8 -s 2025-02-22 -e 2025-02-23 -p 35400`
 
 ## Lister les weekends disponibles
 
-`java -jar tournament-checker.jar -M N3 -m D8 -p 35400 -w -f <FICHIER>`
+`java -jar tournament-checker.jar -M N3 -m D8 -p 35400 -w`
 
 ## Arguments
 
@@ -31,5 +31,3 @@ e : Date de fin
 p : Code postal de la salle
 
 w : Flag pour lister les weekends disponibles (ignore e et s)
-
-f : Le chemin vers le fichier excel

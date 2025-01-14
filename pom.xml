@@ -4,7 +4,7 @@
 
   <groupId>com.bzh.bad</groupId>
   <artifactId>tournament-checker</artifactId>
-  <version>2024.0.0-0</version>
+  <version>2024.1.0-0</version>
   <packaging>jar</packaging>
 
   <name>tournament-checker</name>

@@ -11,8 +11,10 @@ import org.model.Event;
 import org.model.EventType;
 import org.model.Season;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +40,8 @@ public class ExcelUtils {
 
     private static final int HEADER_LINES = 2;
 
-    public static List<Event> getEvents(String file) throws IOException {
-        val sheet = getSheet(file);
+    public static List<Event> getEvents() {
+        val sheet = getSheet();
         List<Event> nextEvents = new ArrayList<>();
 
         val nextTournaments = getEventsByType(sheet, TOURNAMENT);
@@ -67,7 +69,9 @@ public class ExcelUtils {
     }
 
     private static boolean hasContent(EventType type, Row row) {
-        val value = row.getCell(getTitleCell(type)).getStringCellValue();
+        val cell = row.getCell(getTitleCell(type));
+        if (cell == null) return false;
+        val value = cell.getStringCellValue();
         return StringUtil.isNotBlank(value) && switch(type) {
             case TOURNAMENT, CHAMPIONSHIP -> !value.contains(getLastYear());
             case ICR -> value.contains("PN") || value.contains("ICR");
@@ -212,9 +216,34 @@ public class ExcelUtils {
         return mergedRows;
     }
 
-    private static Sheet getSheet(String file) throws IOException {
-        val fis = new FileInputStream(file);
-        val workbook = new XSSFWorkbook(fis);
-        return workbook.getSheetAt(0);
+    private static Sheet getSheet() {
+        val sheetId = "1C1_EMEI1K9Rt9AIbw5mIZkphPHy7KDIlQZOxW3hvosY";
+        val xlsxUrl = "https://docs.google.com/spreadsheets/d/" + sheetId + "/export?format=xlsx";
+
+        try {
+            val httpClient = HttpClient.newBuilder()
+                    .followRedirects(HttpClient.Redirect.NORMAL)
+                    .build();
+
+            val request = HttpRequest.newBuilder()
+                    .uri(URI.create(xlsxUrl))
+                    .GET()
+                    .build();
+
+            val response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
+
+            if (response.statusCode() == 200) {
+                try (val inputStream = response.body()) {
+                    val workbook = new XSSFWorkbook(inputStream);
+                    return workbook.getSheetAt(0);
+                }
+            } else {
+                System.err.println("Failed to retrieve the file. HTTP Status: " + response.statusCode());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

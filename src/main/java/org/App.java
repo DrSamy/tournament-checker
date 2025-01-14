@@ -64,14 +64,6 @@ public class App {
                 .build();
         options.addOption(inputWeekend);
 
-        val inputFile = Option.builder("f")
-                .longOpt("file")
-                .hasArg()
-                .required(true)
-                .desc("Chemin vers le fichier")
-                .build();
-        options.addOption(inputFile);
-
         val parser = new DefaultParser();
         val formatter = new HelpFormatter();
 
@@ -92,12 +84,10 @@ public class App {
 
             val postalCode = cmd.getOptionValue("postal");
 
-            val file = cmd.getOptionValue("file");
-
             if (cmd.hasOption("w")) {
-                dateAvailableFinder(maxPlayerRank, minPlayerRank, postalCode, file);
+                dateAvailableFinder(maxPlayerRank, minPlayerRank, postalCode);
             } else {
-                dateAvailableChecker(maxPlayerRank, minPlayerRank, dateStart, dateEnd, postalCode, false, null, file);
+                dateAvailableChecker(maxPlayerRank, minPlayerRank, dateStart, dateEnd, postalCode, false, null);
             }
         } catch (ParseException e) {
             System.out.println(e.getMessage());

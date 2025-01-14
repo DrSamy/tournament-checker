@@ -1,6 +1,5 @@
 package org;
 
-import api_vacances.ApiException;
 import lombok.val;
 import org.apache.commons.collections4.CollectionUtils;
 import org.model.*;
@@ -18,14 +17,14 @@ import static org.model.PlayerRank.getRange;
 import static org.model.TournamentRank.*;
 
 public class EventUtils {
-    public static void dateAvailableFinder(PlayerRank max, PlayerRank min, String postalCode, String file) throws IOException, InterruptedException {
-        val events = getEvents(file);
+    public static void dateAvailableFinder(PlayerRank max, PlayerRank min, String postalCode) throws IOException, InterruptedException {
+        val events = getEvents();
         for (List<LocalDate> weekend : getNextWeekends()) {
-            dateAvailableChecker(max, min, weekend.getFirst(), weekend.getLast(), postalCode, true, events, file);
+            dateAvailableChecker(max, min, weekend.getFirst(), weekend.getLast(), postalCode, true, events);
         }
     }
 
-    public static void dateAvailableChecker(PlayerRank max, PlayerRank min, LocalDate dateStart, LocalDate dateEnd, String postalCode, boolean displayOnlyAvailable, List<Event> events, String file) throws IOException, InterruptedException {
+    public static void dateAvailableChecker(PlayerRank max, PlayerRank min, LocalDate dateStart, LocalDate dateEnd, String postalCode, boolean displayOnlyAvailable, List<Event> events) throws IOException, InterruptedException {
         val range = getRange(max, min);
         val currentEvent = Event.builder()
                 .title(postalCode)
@@ -36,7 +35,7 @@ public class EventUtils {
                 .tournamentRank(getTournamentRankByPlayerRank(range))
                 .build();
 
-        events = events == null ? getEvents(file) : events;
+        events = events == null ? getEvents() : events;
 
         val concurrence = events.stream()
                 .filter(e -> EventType.TOURNAMENT.equals(e.getType()) || EventType.CHAMPIONSHIP.equals(e.getType()))
